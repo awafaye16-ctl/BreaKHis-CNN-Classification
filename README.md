@@ -5,6 +5,7 @@
 
 Ce projet implémente un **classificateur de cancer du sein de haute performance** entraîné sur le dataset **BreaKHis** (magnifications 40×–400×). Le système utilise **ResNet-50 avec transfer learning**, des stratégies d'entraînement modernes, et une **interprétabilité complète via Grad-CAM**. Une **interface Streamlit** fournit des prédictions en temps réel avec visualisation des heatmaps pour l'interprétabilité.
 
+Mon modèle actuel atteint une précision équilibrée de 55-60%. Après analyse des courbes d'apprentissage, j'ai identifié un plateau précoce. Cela s'explique probablement par un sous-apprentissage (underfitting) lié à la complexité du dataset BreaKHis par rapport à la taille de mon échantillon d'entraînement actuel. Pour rectifier cela, j'ai déjà prévu d'implémenter des Data Augmentations plus agressives (rotations, flips) et d'utiliser une perte pondérée (Weighted CrossEntropy) pour gérer le déséquilibre entre les classes bénignes et malignes.
 ---
 
 ## 🚀 **Performances & Technologies**
@@ -274,7 +275,27 @@ python BreakHis_Classifier/evaluate_cam.py
 
 ---
 
-## 📚 **Documentation Technique**
+## �️ **Galerie - Screenshots du Projet**
+
+### 🌐 **Interface Web Streamlit**
+![Interface Web](image1.png)
+*L'interface utilisateur complète avec upload d'images et résultats en temps réel*
+
+### 🔬 **Visualisation Grad-CAM**
+![Grad-CAM Analysis](image2.png)
+*Analyse interprétable côte à côte : image originale + heatmap IA*
+
+### 📊 **Métriques de Performance**
+![Performance Metrics](image3.png)
+*Tableau de bord avec diagnostic, confiance et fiabilité*
+
+### 🎯 **Résultats de Classification**
+![Classification Results](image4.png)
+*Exemple de classification avec niveaux de confiance colorés*
+
+---
+
+## �📚 **Documentation Technique**
 
 ### 🔧 **Architecture Détaillée**
 ```python
@@ -313,7 +334,7 @@ class BreastCancerResNet(nn.Module):
 
 ### 📧 **Contact**
 - **Maintainer**: Awa Faye
-- **Email**: awa.faye@example.com
+- **Email**: awa.faye16@univ-thies.sn
 - **LinkedIn**: [Profil LinkedIn]
 
 ---

@@ -16,7 +16,9 @@ env/
 
 # Data
 data/
-*.png
+
+# Images (sauf pour présentation)
+# *.png
 
 # Streamlit cache
 .streamlit/
