@@ -72,73 +72,98 @@ st.sidebar.markdown("**Seuil confiance:** 70%")
 uploaded_file = st.file_uploader("Upload une image histopathologique", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
-    img = Image.open(uploaded_file).convert("RGB")
-    st.image(img, caption="Image d'entrée", use_column_width=True)
+    try:
+        # Vérification du type de fichier
+        if not uploaded_file.name.lower().endswith(('.jpg', '.jpeg', '.png')):
+            st.error("Format non supporté. Utilisez JPG, JPEG ou PNG.")
+            st.stop()
+        
+        # Chargement robuste de l'image
+        img = Image.open(uploaded_file)
+        
+        # Conversion en RGB avec gestion d'erreurs
+        if img.mode != 'RGB':
+            try:
+                img = img.convert('RGB')
+            except Exception as e:
+                st.error(f"Erreur de conversion d'image: {str(e)}")
+                st.stop()
+        
+        # Validation de l'image
+        img.verify()  # Vérifie l'intégrité de l'image
+        uploaded_file.seek(0)  # Reset le curseur après verify
+        img = Image.open(uploaded_file).convert('RGB')
+        
+        st.image(img, caption="Image d'entrée", use_column_width=True)
 
-    img_tensor = transform(img).unsqueeze(0).to(device)
+        img_tensor = transform(img).unsqueeze(0).to(device)
 
-    with torch.no_grad():
+        with torch.no_grad():
+            output = model(img_tensor)
+            probs = torch.softmax(output, dim=1)[0]
+            pred_idx = torch.argmax(probs).item()
+
+        classes = ["Bénin", "Malin"]
+        label = classes[pred_idx]
+        confidence = float(probs[pred_idx] * 100)
+
+        if confidence < 70.0:
+            st.warning(f"Confiance faible : {confidence:.2f}% (<70%). Vérifier manuellement.")
+        else:
+            st.success(f"Pred: {label} ({confidence:.2f}% confiance)")
+
+        # Grad-CAM
+        target_layer = model.backbone.layer4[-1]
+        activations = []
+        gradients = []
+
+        def forward_hook(module, inp, out):
+            activations.append(out)
+
+        def backward_hook(module, grad_in, grad_out):
+            gradients.append(grad_out[0])
+
+        handle_f = target_layer.register_forward_hook(forward_hook)
+        handle_b = target_layer.register_backward_hook(backward_hook)
+
+        model.zero_grad()
         output = model(img_tensor)
-        probs = torch.softmax(output, dim=1)[0]
-        pred_idx = torch.argmax(probs).item()
+        pred_score = output[0, pred_idx]
+        pred_score.backward(retain_graph=False)
 
-    classes = ["Bénin", "Malin"]
-    label = classes[pred_idx]
-    confidence = float(probs[pred_idx] * 100)
+        handle_f.remove()
+        handle_b.remove()
 
-    if confidence < 70.0:
-        st.warning(f"Confiance faible : {confidence:.2f}% (<70%). Vérifier manuellement.")
-    else:
-        st.success(f"Pred: {label} ({confidence:.2f}% confiance)")
+        grad = gradients[0].detach().cpu().numpy()[0]
+        act = activations[0].detach().cpu().numpy()[0]
+        weights = np.mean(grad, axis=(1, 2))
+        cam = np.zeros(act.shape[1:], dtype=np.float32)
+        for i, w in enumerate(weights):
+            cam += w * act[i, :, :]
 
-    # Grad-CAM
-    target_layer = model.backbone.layer4[-1]
-    activations = []
-    gradients = []
+        cam = np.maximum(cam, 0)
+        if np.max(cam) != 0:
+            cam = cam / np.max(cam)
 
-    def forward_hook(module, inp, out):
-        activations.append(out)
+        cam = cv2.resize(cam, (img.size[0], img.size[1]))
+        heatmap = cv2.applyColorMap(np.uint8(255 * cam), cv2.COLORMAP_JET)
+        img_np = np.array(img)
+        img_bgr = cv2.cvtColor(img_np, cv2.COLOR_RGB2BGR)
+        overlay = cv2.addWeighted(img_bgr, 0.6, heatmap, 0.4, 0)
+        overlay = cv2.cvtColor(overlay, cv2.COLOR_BGR2RGB)
 
-    def backward_hook(module, grad_in, grad_out):
-        gradients.append(grad_out[0])
+        st.subheader("Grad-CAM")
+        col1, col2 = st.columns(2)
+        with col1:
+            st.image(img, caption="Original", use_column_width=True)
+        with col2:
+            st.image(overlay, caption="Grad-CAM Heatmap", use_column_width=True)
 
-    handle_f = target_layer.register_forward_hook(forward_hook)
-    handle_b = target_layer.register_backward_hook(backward_hook)
-
-    model.zero_grad()
-    output = model(img_tensor)
-    pred_score = output[0, pred_idx]
-    pred_score.backward(retain_graph=False)
-
-    handle_f.remove()
-    handle_b.remove()
-
-    grad = gradients[0].detach().cpu().numpy()[0]
-    act = activations[0].detach().cpu().numpy()[0]
-    weights = np.mean(grad, axis=(1, 2))
-    cam = np.zeros(act.shape[1:], dtype=np.float32)
-    for i, w in enumerate(weights):
-        cam += w * act[i, :, :]
-
-    cam = np.maximum(cam, 0)
-    if np.max(cam) != 0:
-        cam = cam / np.max(cam)
-
-    cam = cv2.resize(cam, (img.size[0], img.size[1]))
-    heatmap = cv2.applyColorMap(np.uint8(255 * cam), cv2.COLORMAP_JET)
-    img_np = np.array(img)
-    img_bgr = cv2.cvtColor(img_np, cv2.COLOR_RGB2BGR)
-    overlay = cv2.addWeighted(img_bgr, 0.6, heatmap, 0.4, 0)
-    overlay = cv2.cvtColor(overlay, cv2.COLOR_BGR2RGB)
-
-    st.subheader("Grad-CAM")
-    col1, col2 = st.columns(2)
-    with col1:
-        st.image(img, caption="Original", use_column_width=True)
-    with col2:
-        st.image(overlay, caption="Grad-CAM Heatmap", use_column_width=True)
-
-    st.markdown(f"**Classe** : {label}  \
+        st.markdown(f"**Classe** : {label}  \
 **Confiance** : {confidence:.2f}%")
+
+    except Exception as e:
+        st.error(f"Erreur lors du traitement de l'image: {str(e)}")
+        st.info("Veuillez vérifier que le fichier est une image valide (JPG, JPEG, PNG) et réessayer.")
 else:
     st.info("Téléversez une image pour démarrer la prédiction.")
