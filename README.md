@@ -9,12 +9,26 @@ Ce projet implémente un **classificateur de cancer du sein de haute performance
 
 ## 🚀 **Performances & Technologies**
 
-### 📊 **Performances Exceptionnelles**
-- **Précision (Accuracy)**: >95% sur validation
-- **F1-Score**: 0.96
-- **AUC-ROC**: 0.98
+### 📊 **Performances Actuelles & Pistes d'Amélioration**
+
+**🎯 Résultats Obtenus :**
+- **Précision (Accuracy)**: 55-60% (phase d'optimisation active)
+- **F1-Score**: 0.57 (balanced accuracy)
+- **AUC-ROC**: 0.62
 - **Temps d'inférence**: <1 seconde
 - **Taille modèle**: 96MB optimisé
+
+**🔍 Analyse & Diagnostic :**
+- **Underfitting identifié** via courbes d'apprentissage
+- **Plateau précoce** après 4-5 epochs
+- **Complexité BreaKHis** vs taille échantillon actuelle
+- **Déséquilibre classes** bénin/malin à adresser
+
+**🚀 Solutions en Développement :**
+- **Data Augmentation agressive** : rotations étendues (±45°), flips multiples
+- **Weighted CrossEntropy** : pondération automatique des classes
+- **Learning Rate adaptatif** : réduction dynamique sur plateau
+- **Architecture fine-tuning** : unfreeze progressif des couches
 
 ### 🛠️ **Stack Technique Avancé**
 ```python
@@ -194,14 +208,19 @@ python BreakHis_Classifier/evaluate_cam.py
 
 ---
 
-## 📊 **Benchmark & Comparaison**
+## 📊 **Benchmark & Objectifs d'Amélioration**
 
-| Modèle | Accuracy | F1-Score | AUC | Temps/Inférence |
-|--------|----------|----------|-----|----------------|
-| **Notre ResNet-50** | **95.2%** | **0.96** | **0.98** | **<1s** |
-| VGG-16 | 89.3% | 0.91 | 0.94 | 1.2s |
-| EfficientNet-B0 | 93.1% | 0.94 | 0.96 | 0.8s |
-| DenseNet-121 | 91.7% | 0.93 | 0.95 | 1.5s |
+| Modèle | Accuracy Actuelle | Accuracy Cible | F1-Score | AUC | Temps/Inférence |
+|--------|-------------------|----------------|----------|-----|----------------|
+| **Notre ResNet-50** | **55-60%** | **85%+** | 0.57 | 0.62 | **<1s** |
+| VGG-16 | 89.3% | - | 0.91 | 0.94 | 1.2s |
+| EfficientNet-B0 | 93.1% | - | 0.94 | 0.96 | 0.8s |
+| DenseNet-121 | 91.7% | - | 0.93 | 0.95 | 1.5s |
+
+**🎯 Plan d'Optimisation :**
+- **Phase 1 (1-2 semaines)**: Data Augmentation + Weighted Loss → 70-75%
+- **Phase 2 (2-3 semaines)**: Architecture fine-tuning → 80-85%  
+- **Phase 3 (1 mois)**: Hyperparameter tuning → 85%+ cible
 
 ---
 
@@ -215,23 +234,30 @@ python BreakHis_Classifier/evaluate_cam.py
 - **Interface Utilisateur**: Streamlit, UX design
 - **Gestion Projet**: Git, documentation, tests
 
-### 🚀 **Innovation Technologique**
-- **Architecture hybride**: ResNet-50 + custom head
-- **Optimisation performance**: Early stopping, LR scheduling
-- **Interprétabilité médicale**: Grad-CAM pour validation clinique
-- **Déploiement production**: Docker, API REST ready
+### 🚀 **Innovation & Résolution de Problèmes**
+- **Diagnostic précis** de l'underfitting via analyse des courbes
+- **Solutions techniques** identifiées et planifiées
+- **Approche méthodique** : Data Augmentation → Weighted Loss → Fine-tuning
+- **Interprétabilité médicale** : Grad-CAM pour validation clinique
+- **Déploiement production** : Interface web fonctionnelle malgré performances en optimisation
 
-### 📈 **Impact Business**
-- **Réduction faux diagnostics**: Interprétabilité IA
-- **Accélération workflow**: Prédiction <1 seconde
-- **Scalabilité**: Architecture cloud-ready
-- **Conformité médicale**: Traçabilité et explications
+### 📈 **Impact Business & Potentiel**
+- **Prototype fonctionnel** avec interface utilisateur complète
+- **Pipeline MLOps** opérationnel (entraînement → déploiement → monitoring)
+- **Scalabilité technique** : architecture cloud-ready
+- **Vision stratégique** : roadmap d'amélioration avec objectifs clairs
+- **Capacité d'adaptation** : ajustement continu basé sur métriques
 
 ---
 
 ## 🔮 **Roadmap & Évolutions**
 
 ### 🎯 **Short Term (1-3 mois)**
+- [x] **Interface Streamlit** fonctionnelle ✅
+- [ ] **Optimisation performances** (cible 85%+) 🎯 **PRIORITÉ**
+  - [ ] Data Augmentation agressive
+  - [ ] Weighted CrossEntropy Loss
+  - [ ] Learning Rate scheduling avancé
 - [ ] **Multi-class classification** (sous-types tumoraux)
 - [ ] **API REST** pour intégration hospitalière
 - [ ] **Tests automatisés** et CI/CD
