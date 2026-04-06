@@ -1,48 +1,48 @@
 
-# 🩺 Breast Cancer AI Classifier (PyTorch + ResNet‑50 + Grad-CAM)
+# Breast Cancer AI Classifier (PyTorch + ResNet‑50 + Grad-CAM)
 
-## 🎯 **Projet IA Médical de Classification Histopathologique**
+##  **Projet IA Médical de Classification Histopathologique**
 
 Ce projet implémente un **classificateur de cancer du sein de haute performance** entraîné sur le dataset **BreaKHis** (magnifications 40×–400×). Le système utilise **ResNet-50 avec transfer learning**, des stratégies d'entraînement modernes, et une **interprétabilité complète via Grad-CAM**. Une **interface Streamlit** fournit des prédictions en temps réel avec visualisation des heatmaps pour l'interprétabilité.
 
 Mon modèle actuel atteint une précision équilibrée de 55-60%. Après analyse des courbes d'apprentissage, j'ai identifié un plateau précoce. Cela s'explique probablement par un sous-apprentissage (underfitting) lié à la complexité du dataset BreaKHis par rapport à la taille de mon échantillon d'entraînement actuel. Pour rectifier cela, j'ai déjà prévu d'implémenter des Data Augmentations plus agressives (rotations, flips) et d'utiliser une perte pondérée (Weighted CrossEntropy) pour gérer le déséquilibre entre les classes bénignes et malignes.
 ---
 
-## 🚀 **Performances & Technologies**
+##  **Performances & Technologies**
 
-### 📊 **Performances Actuelles & Pistes d'Amélioration**
+###  **Performances Actuelles & Pistes d'Amélioration**
 
-**🎯 Résultats Obtenus :**
+** Résultats Obtenus :**
 - **Précision (Accuracy)**: 55-60% (phase d'optimisation active)
 - **F1-Score**: 0.57 (balanced accuracy)
 - **AUC-ROC**: 0.62
 - **Temps d'inférence**: <1 seconde
 - **Taille modèle**: 96MB optimisé
 
-**🔍 Analyse & Diagnostic :**
+** Analyse & Diagnostic :**
 - **Underfitting identifié** via courbes d'apprentissage
 - **Plateau précoce** après 4-5 epochs
 - **Complexité BreaKHis** vs taille échantillon actuelle
 - **Déséquilibre classes** bénin/malin à adresser
 
-**🚀 Solutions en Développement :**
+** Solutions en Développement :**
 - **Data Augmentation agressive** : rotations étendues (±45°), flips multiples
 - **Weighted CrossEntropy** : pondération automatique des classes
 - **Learning Rate adaptatif** : réduction dynamique sur plateau
 - **Architecture fine-tuning** : unfreeze progressif des couches
 
-### 🛠️ **Stack Technique Avancé**
+###  **Stack Technique Avancé**
 ```python
-🤖 Deep Learning Framework: PyTorch 2.0+
-🏗️ Architecture: ResNet-50 (Transfer Learning)
-🎯 Optimizer: AdamW avec Cosine Annealing LR
-📊 Métriques: Precision, Recall, F1, AUC, Balanced Accuracy
-🔬 Interprétabilité: Grad-CAM (Gradient-weighted Class Activation Mapping)
-🌐 Interface: Streamlit (Web App)
-📦 Déploiement: Docker-ready
+ Deep Learning Framework: PyTorch 2.0+
+ Architecture: ResNet-50 (Transfer Learning)
+ Optimizer: AdamW avec Cosine Annealing LR
+ Métriques: Precision, Recall, F1, AUC, Balanced Accuracy
+ Interprétabilité: Grad-CAM (Gradient-weighted Class Activation Mapping)
+ Interface: Streamlit (Web App)
+ Déploiement: Docker-ready
 ```
 
-### 🧠 **Pourquoi ces Technologies ?**
+###  **Pourquoi ces Technologies ?**
 
 **PyTorch** - Framework de référence en recherche IA
 - Flexibilité pour architectures personnalisées
@@ -61,7 +61,7 @@ Mon modèle actuel atteint une précision équilibrée de 55-60%. Après analyse
 
 ---
 
-## 📁 **Structure du Projet**
+##  **Structure du Projet**
 
 ```
 BreakHis_Classifier-main/
@@ -87,9 +87,9 @@ BreakHis_Classifier-main/
 
 ---
 
-## ⚡ **Installation & Démarrage Rapide**
+##  **Installation & Démarrage Rapide**
 
-### 🐍 **Environnement Python**
+###  **Environnement Python**
 ```bash
 # Clonage du repository
 git clone https://github.com/awafaye16-ctl/BreaKHis-CNN-Classification.git
@@ -102,7 +102,7 @@ poetry install
 poetry shell
 ```
 
-### 📊 **Dataset BreaKHis**
+###  **Dataset BreaKHis**
 ```bash
 # Organisation automatique des données
 python BreakHis_Classifier/organiser.py --data-path /path/to/breakhis/raw
@@ -119,15 +119,15 @@ data/
 
 ---
 
-## 🎯 **Cas d'Usage & Applications**
+##  **Cas d'Usage & Applications**
 
-### 🏥 **Applications Cliniques**
+###  **Applications Cliniques**
 - **Aide au diagnostic** pour pathologistes
 - **Dépistage précoce** en zones rurales
 - **Formation médicale** avec visualisation IA
 - **Recherche clinique** sur biomarqueurs
 
-### 🔬 **Recherche & Développement**
+###  **Recherche & Développement**
 - **Validation de nouvelles architectures**
 - **Études d'interprétabilité** (XAI)
 - **Benchmarking** médical
@@ -135,9 +135,9 @@ data/
 
 ---
 
-## 🚀 **Entraînement du Modèle**
+## **Entraînement du Modèle**
 
-### 🎛️ **Configuration Avancée**
+###  **Configuration Avancée**
 ```bash
 # Entraînement complet avec GPU
 python BreakHis_Classifier/cnn_resnet.py \
@@ -155,21 +155,21 @@ python BreakHis_Classifier/cnn_resnet.py \
     --batch-size 16
 ```
 
-### 📊 **Hyperparamètres Optimisés**
+###  **Hyperparamètres Optimisés**
 ```python
-🎯 Learning Rate: 3e-5 (AdamW)
-📦 Batch Size: 32 (GPU), 16 (CPU/MPS)
-🔄 Scheduler: Cosine Annealing (T_max=25)
-⏸️ Early Stopping: Patience=7 epochs
-🎲 Label Smoothing: 0.1
-💾 Best Model Checkpoint: Automatic
+ Learning Rate: 3e-5 (AdamW)
+ Batch Size: 32 (GPU), 16 (CPU/MPS)
+ Scheduler: Cosine Annealing (T_max=25)
+ Early Stopping: Patience=7 epochs
+ Label Smoothing: 0.1
+ Best Model Checkpoint: Automatic
 ```
 
 ---
 
-## 🌐 **Interface Web - Démo Live**
+##  **Interface Web - Démo Live**
 
-### 🎨 **Lancement Application**
+###  **Lancement Application**
 ```bash
 # Démarrage interface web
 streamlit run BreakHis_Classifier/app.py --server.port 8501
@@ -178,7 +178,7 @@ streamlit run BreakHis_Classifier/app.py --server.port 8501
 poetry run streamlit run BreakHis_Classifier/app.py
 ```
 
-### ✨ **Fonctionnalités Interface**
+###  **Fonctionnalités Interface**
 - **Upload drag-and-drop** d'images histopathologiques
 - **Prédiction en temps réel** (<1s)
 - **Visualisation Grad-CAM** côte à côte
@@ -188,9 +188,9 @@ poetry run streamlit run BreakHis_Classifier/app.py
 
 ---
 
-## 🔬 **Interprétabilité IA - Grad-CAM**
+##  **Interprétabilité IA - Grad-CAM**
 
-### 📈 **Analyse des Heatmaps**
+###  **Analyse des Heatmaps**
 ```bash
 # Évaluation complète des cartes d'attention
 python BreakHis_Classifier/evaluate_cam.py
@@ -202,14 +202,14 @@ python BreakHis_Classifier/evaluate_cam.py
 - Corrélation de randomisation
 ```
 
-### 🎯 **Interprétation Clinique**
+###  **Interprétation Clinique**
 - **🔴 Rouge/Orange**: Zones malignes suspectées
 - **🔵 Bleu**: Tissu sain/bénin
 - **⚡ Intensité**: Niveau de confiance de l'IA
 
 ---
 
-## 📊 **Benchmark & Objectifs d'Amélioration**
+##  **Benchmark & Objectifs d'Amélioration**
 
 | Modèle | Accuracy Actuelle | Accuracy Cible | F1-Score | AUC | Temps/Inférence |
 |--------|-------------------|----------------|----------|-----|----------------|
@@ -218,16 +218,16 @@ python BreakHis_Classifier/evaluate_cam.py
 | EfficientNet-B0 | 93.1% | - | 0.94 | 0.96 | 0.8s |
 | DenseNet-121 | 91.7% | - | 0.93 | 0.95 | 1.5s |
 
-**🎯 Plan d'Optimisation :**
+** Plan d'Optimisation :**
 - **Phase 1 (1-2 semaines)**: Data Augmentation + Weighted Loss → 70-75%
 - **Phase 2 (2-3 semaines)**: Architecture fine-tuning → 80-85%  
 - **Phase 3 (1 mois)**: Hyperparameter tuning → 85%+ cible
 
 ---
 
-## 🎯 **Pour les Recruteurs - Valeur Métier**
+##  **Pour les Recruteurs - Valeur Métier**
 
-### 💼 **Compétences Démontrées**
+###  **Compétences Démontrées**
 - **Deep Learning Avancé**: PyTorch, Transfer Learning
 - **Computer Vision Médical**: Classification histopathologique  
 - **MLOps**: Entraînement, déploiement, monitoring
@@ -235,14 +235,14 @@ python BreakHis_Classifier/evaluate_cam.py
 - **Interface Utilisateur**: Streamlit, UX design
 - **Gestion Projet**: Git, documentation, tests
 
-### 🚀 **Innovation & Résolution de Problèmes**
+###  **Innovation & Résolution de Problèmes**
 - **Diagnostic précis** de l'underfitting via analyse des courbes
 - **Solutions techniques** identifiées et planifiées
 - **Approche méthodique** : Data Augmentation → Weighted Loss → Fine-tuning
 - **Interprétabilité médicale** : Grad-CAM pour validation clinique
 - **Déploiement production** : Interface web fonctionnelle malgré performances en optimisation
 
-### 📈 **Impact Business & Potentiel**
+###  **Impact Business & Potentiel**
 - **Prototype fonctionnel** avec interface utilisateur complète
 - **Pipeline MLOps** opérationnel (entraînement → déploiement → monitoring)
 - **Scalabilité technique** : architecture cloud-ready
@@ -251,9 +251,9 @@ python BreakHis_Classifier/evaluate_cam.py
 
 ---
 
-## 🔮 **Roadmap & Évolutions**
+##  **Roadmap & Évolutions**
 
-### 🎯 **Short Term (1-3 mois)**
+###  **Short Term (1-3 mois)**
 - [x] **Interface Streamlit** fonctionnelle ✅
 - [ ] **Optimisation performances** (cible 85%+) 🎯 **PRIORITÉ**
   - [ ] Data Augmentation agressive
@@ -263,12 +263,12 @@ python BreakHis_Classifier/evaluate_cam.py
 - [ ] **API REST** pour intégration hospitalière
 - [ ] **Tests automatisés** et CI/CD
 
-### 🚀 **Medium Term (3-6 mois)**  
+###  **Medium Term (3-6 mois)**  
 - [ ] **Modèles par magnification** (40×, 100×, 200×, 400×)
 - [ ] **Deployment Docker/Kubernetes**
 - [ ] **Interface mobile** (React Native)
 
-### 🌟 **Long Term (6+ mois)**
+###  **Long Term (6+ mois)**
 - [ ] **Federated Learning** multi-hôpitaux
 - [ ] **ONNX/CoreML** pour edge deployment
 - [ ] **Validation clinique** étude réelle
@@ -277,25 +277,25 @@ python BreakHis_Classifier/evaluate_cam.py
 
 ## �️ **Galerie - Screenshots du Projet**
 
-### 🌐 **Interface Web Streamlit**
+###  **Interface Web Streamlit**
 ![Interface Web](image1.png)
 *L'interface utilisateur complète avec upload d'images et résultats en temps réel*
 
-### 🔬 **Visualisation Grad-CAM**
+###  **Visualisation Grad-CAM**
 ![Grad-CAM Analysis](image2.png)
 *Analyse interprétable côte à côte : image originale + heatmap IA*
 
-### 📊 **Métriques de Performance**
+###  **Métriques de Performance**
 ![Performance Metrics](image3.png)
 *Tableau de bord avec diagnostic, confiance et fiabilité*
 
-### 🎯 **Résultats de Classification**
+###  **Résultats de Classification**
 ![Classification Results](image4.png)
 *Exemple de classification avec niveaux de confiance colorés*
 
 ---
 
-## �📚 **Documentation Technique**
+##  **Documentation Technique**
 
 ### 🔧 **Architecture Détaillée**
 ```python
@@ -311,7 +311,7 @@ class BreastCancerResNet(nn.Module):
         # ... architecture détaillée dans cnn_resnet.py
 ```
 
-### 📊 **Métriques Suivies**
+###  **Métriques Suivies**
 - **Loss**: CrossEntropy avec label smoothing (0.1)
 - **Accuracy**: Précision globale
 - **Precision/Recall**: Par classe
@@ -320,19 +320,18 @@ class BreastCancerResNet(nn.Module):
 - **Balanced Accuracy**: Classes déséquilibrées
 
 ---
+##  **Contribution & Support**
 
-## 🤝 **Contribution & Support**
-
-### 🐛 **Issues & Bugs**
+###  **Issues & Bugs**
 - Reporter via [GitHub Issues](https://github.com/awafaye16-ctl/BreaKHis-CNN-Classification/issues)
 - Fournir: environnement, données reproduisant, logs
 
-### 💡 **Améliorations**
+###  **Améliorations**
 - Fork + Pull Request avec description
 - Tests unitaires requis
 - Documentation mise à jour
 
-### 📧 **Contact**
+###  **Contact**
 - **Maintainer**: Awa Faye
 - **Email**: awa.faye16@univ-thies.sn
 - **LinkedIn**: [Profil LinkedIn]
@@ -341,14 +340,14 @@ class BreastCancerResNet(nn.Module):
 
 ## 📄 **License & Éthique**
 
-⚠️ **Usage Recherche & Éducation uniquement**
+ **Usage Recherche & Éducation uniquement**
 - **Ne pas utiliser** pour diagnostic médical direct
 - **Validation clinique** requise pour usage réel
 - **Responsabilité** de l'utilisateur final
 
 ---
 
-## 🏆 **Références & Publications**
+##  **Références & Publications**
 
 1. **BreaKHis Dataset**: [Spanhol et al., 2015]
 2. **ResNet**: [He et al., 2016]  
@@ -359,7 +358,7 @@ class BreastCancerResNet(nn.Module):
 
 <div align="center">
 
-### 🩺 **Breast Cancer AI - Intelligence au Service de la Santé**
+###  **Breast Cancer AI - Intelligence au Service de la Santé**
 
 **Built with ❤️ using PyTorch • Streamlit • Grad-CAM**
 
